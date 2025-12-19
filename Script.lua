@@ -5,20 +5,31 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- Replace with the actual PlaceID of "Steal a Brainrot" (or search for it dynamically)
-local placeId = 109983668079237 -- Example PlaceID (verify this!)
+-- Step 1: Search for the game "Steal a Brainrot"
+local searchKeyword = "Steal a Brainrot"
+local searchUrl = "https://games.roblox.com/v1/games?keyword=" .. searchKeyword:gsub(" ", "%20") .. "&limit=1"
+local searchResponse = game:HttpGetAsync(searchUrl)
+local searchData = HttpService:JSONDecode(searchResponse)
 
--- Fetch public servers for the game
-local apiUrl = "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
-local response = game:HttpGetAsync(apiUrl)
-local servers = HttpService:JSONDecode(response)
+-- Check if the game exists
+if #searchData.data > 0 then
+    local placeId = searchData.data[1].rootPlaceId
+    print("Found '" .. searchKeyword .. "' with PlaceID:", placeId)
 
--- Find and join a server with "brainrot" in the name
-for _, server in ipairs(servers.data) do
-    if server.name:lower():find("brainrot") then
-        print("Joining Brainrot Server:", server.name, "ID:", server.id)
-        TeleportService:TeleportToServerInstance(placeId, server.id, player)
-        return
+    -- Step 2: Fetch public servers for the game
+    local apiUrl = "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
+    local serverResponse = game:HttpGetAsync(apiUrl)
+    local servers = HttpService:JSONDecode(serverResponse)
+
+    -- Step 3: Find and join a server with "brainrot" in the name
+    for _, server in ipairs(servers.data) do
+        if server.name:lower():find("brainrot") then
+            print("Joining Brainrot Server:", server.name, "ID:", server.id)
+            TeleportService:TeleportToServerInstance(placeId, server.id, player)
+            return
+        end
     end
+    warn("No Brainrot servers found.")
+else
+    warn("Game '" .. searchKeyword .. "' not found.")
 end
-warn("No Brainrot servers found.")
