@@ -6,7 +6,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- Replace with the actual PlaceID of "Steal a Brainrot" (or search for it dynamically)
-local placeId = 16466213388 -- Example PlaceID (verify this!)
+local placeId = 109983668079237 -- Example PlaceID (verify this!)
 
 -- Fetch public servers for the game
 local apiUrl = "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
