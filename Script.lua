@@ -1,4 +1,4 @@
-
+ 
 -- Find and Join "Steal a Brainrot" Public Servers
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
@@ -23,7 +23,7 @@ if #searchData.data > 0 then
 
     -- Step 3: Find and join a server with "brainrot" in the name
     for _, server in ipairs(servers.data) do
-        if server.name:lower():find("brainrot") then
+        if server.playing and server.name:lower():find("brainrot") then
             print("Joining Brainrot Server:", server.name, "ID:", server.id)
             TeleportService:TeleportToServerInstance(placeId, server.id, player)
             return
@@ -33,3 +33,6 @@ if #searchData.data > 0 then
 else
     warn("Game '" .. searchKeyword .. "' not found.")
 end
+```
+
+---
